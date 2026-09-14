@@ -45,10 +45,9 @@ var tickets = new List<Ticket>
     }
 };
 
-app.UseStaticFiles();
 app.UseDefaultFiles();
+app.UseStaticFiles();
 
-app.MapGet("/", () => "Hello World!");
 app.MapGet("/api/tickets", () => tickets);
 
 app.MapGet("/api/tickets/{id}", (int id) => tickets.FirstOrDefault(t => t.Id == id));
