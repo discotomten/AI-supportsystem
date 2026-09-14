@@ -9,6 +9,9 @@ public class Ticket
     public Priority Priority { get; set; } = Priority.Low;
     public List<Keyword> Keywords { get; set; } = new List<Keyword>();
     public Sentiment Sentiment { get; set; } = Sentiment.Neutral;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;   
+    public DateTime? ClosedAt { get; set; } = null;
+    public string ContactInformation { get; set; } = "";
 }
 
 public class Keyword
@@ -36,4 +39,11 @@ public enum Sentiment
     Neutral,
     Negative,
     Mixed,
+}
+
+public class TicketDto
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string ContactInformation { get; set; }
 }
