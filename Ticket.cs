@@ -1,3 +1,5 @@
+using Azure.AI.TextAnalytics;
+
 namespace AI_supportsystem;
 
 public class Ticket
@@ -8,7 +10,7 @@ public class Ticket
     public Status Status { get; set; } = Status.Open;
     public Priority Priority { get; set; } = Priority.Low;
     public List<Keyword> Keywords { get; set; } = new List<Keyword>();
-    public Sentiment Sentiment { get; set; } = Sentiment.Neutral;
+    public TextSentiment Sentiment { get; set; } = TextSentiment.Neutral;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;   
     public DateTime? ClosedAt { get; set; } = null;
     public string ContactInformation { get; set; } = "";
@@ -31,14 +33,6 @@ public enum Priority
     Low,
     Medium,
     High
-}
-
-public enum Sentiment
-{
-    Positive,
-    Neutral,
-    Negative,
-    Mixed,
 }
 
 public class TicketDto

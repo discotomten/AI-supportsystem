@@ -17,20 +17,15 @@ public class TicketHandler
 
         var language = client.DetectLanguage(ticket.Description);
         DocumentSentiment documentSentiment = client.AnalyzeSentiment(ticket.Description, language.Value.Iso6391Name);
-        ticket.Sentiment = documentSentiment.Sentiment switch
-        {
-            TextSentiment.Positive => Sentiment.Positive,
-            TextSentiment.Neutral => Sentiment.Neutral,
-            TextSentiment.Negative => Sentiment.Negative,
-            TextSentiment.Mixed => Sentiment.Mixed,
-            _ => ticket.Sentiment
-        };
+        ticket.Sentiment = documentSentiment.Sentiment;
 
         var keyPhrases = client.ExtractKeyPhrases(ticket.Description, language.Value.Iso6391Name);
         foreach (var phrase in keyPhrases.Value)
         {
             ticket.Keywords.Add(new Keyword { Text = phrase });
         }
+        
+        GuessedPriority(ticket);
 
         return ticket;
     }
@@ -40,8 +35,23 @@ public class TicketHandler
         ticket.Status = Status.Closed;
         ticket.ClosedAt = DateTime.UtcNow;
     }
-    
-    public List<string> BadWords = new List<string>(new []{
+
+    private void GuessedPriority(Ticket ticket)
+    {
+        ticket.Priority = ticket.Sentiment is TextSentiment.Negative or TextSentiment.Mixed or TextSentiment.Neutral 
+            ? Priority.High 
+            : Priority.Medium;
+        
+        foreach (var badWord in BadWords)
+        {
+            if (!ticket.Description.Contains(badWord, StringComparison.OrdinalIgnoreCase)) 
+                continue;
+            ticket.Priority = Priority.High;
+            break;
+        }
+    }
+
+    private readonly List<string> BadWords = new List<string>(new []{
         "äcklig",
         "matförgiftning",
         "farlig",
@@ -55,5 +65,17 @@ public class TicketHandler
         "yuck",
         "blä",
         "kvävdes",
+        "advokat",
+        "stämma",
+        "dyrt",
+        "italiensk",
+        "italien",
+        "italienska",
+        "italiensk mat",
+        "italiensk restaurang",
+        "rom",
+        "latin",
+        "mumie",
+        "dammråttor",
     });
 }
