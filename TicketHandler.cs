@@ -14,12 +14,14 @@ public class TicketHandler
             Status = Status.Open,
             CreatedAt = DateTime.UtcNow,
         };
+        
+        var totalTicket = $"Title: " + ticket.Title + "Description: " + ticket.Description;
 
-        var language = client.DetectLanguage(ticket.Description);
-        DocumentSentiment documentSentiment = client.AnalyzeSentiment(ticket.Description, language.Value.Iso6391Name);
+        var language = client.DetectLanguage(totalTicket);
+        DocumentSentiment documentSentiment = client.AnalyzeSentiment(totalTicket, language.Value.Iso6391Name);
         ticket.Sentiment = documentSentiment.Sentiment;
 
-        var keyPhrases = client.ExtractKeyPhrases(ticket.Description, language.Value.Iso6391Name);
+        var keyPhrases = client.ExtractKeyPhrases(totalTicket, language.Value.Iso6391Name);
         foreach (var phrase in keyPhrases.Value)
         {
             ticket.Keywords.Add(new Keyword { Text = phrase });

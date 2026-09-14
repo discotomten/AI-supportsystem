@@ -17,33 +17,7 @@ var client = new TextAnalyticsClient(
     new AzureKeyCredential(key)
 );
 
-var tickets = new List<Ticket>
-{
-    new Ticket
-    {
-        Id = 1,
-        Title = "Aj",
-        Description = "Gör ont när jag biter i folie",
-        Status = Status.Open,
-        Priority = Priority.High
-    },
-    new Ticket
-    {
-        Id = 2,
-        Title = "Hur kan ni kalla detta för en leksak?",
-        Description = "Yxan orsakar väggskador när min son slår med den mot fasaden",
-        Status = Status.InProgress,
-        Priority = Priority.Medium
-    },
-    new Ticket
-    {
-        Id = 3,
-        Title = "Betala tillbaka!!!!!",
-        Description = "Dubbel betalning för kyckling och keso på Ica Togo",
-        Status = Status.Closed,
-        Priority = Priority.Low
-    }
-};
+var tickets = TicketsData.GetTickets();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -51,14 +25,16 @@ app.UseStaticFiles();
 app.MapGet("/api/tickets", () => tickets);
 
 app.MapGet("/api/tickets/{id}", (int id) => tickets.FirstOrDefault(t => t.Id == id));
-app.MapPost("/api/tickets", (TicketDto ticket) => {
+app.MapPost("/api/tickets", (TicketDto ticket) =>
+{
     var handler = new TicketHandler();
     var newTicket = handler.HandleTicket(client, ticket);
     newTicket.Id = tickets.Max(t => t.Id) + 1;
     tickets.Add(newTicket);
     return Results.Created($"/api/tickets/{newTicket.Id}", newTicket);
 });
-app.MapPut("/api/tickets/{id}/close", (int id, TicketDto ticket) => {
+app.MapPut("/api/tickets/{id}/close", (int id, TicketDto ticket) =>
+{
     var existingTicket = tickets.FirstOrDefault(t => t.Id == id);
     if (existingTicket is null)
     {
