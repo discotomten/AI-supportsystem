@@ -54,6 +54,4 @@ app.MapGet("/api/tickets", () => tickets);
 app.MapGet("/api/tickets/{id}", (int id) => tickets.FirstOrDefault(t => t.Id == id));
 app.MapPost("/api/tickets", (Ticket ticket) => tickets.Add(ticket));
 
-
-
 app.Run();
