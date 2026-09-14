@@ -1,7 +1,19 @@
 using AI_supportsystem;
+using Azure;
+using Azure.AI.TextAnalytics;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
+
+// Eller hur det nu hämtas
+string endpoint = Environment.GetEnvironmentVariable("LANGUAGE_ENDPOINT");
+string key = Environment.GetEnvironmentVariable("LANGUAGE_KEY");
+
+// Den viktiga biten
+var client = new TextAnalyticsClient(
+    new Uri(endpoint),
+    new AzureKeyCredential(key)
+);
 
 var tickets = new List<Ticket>
 {
