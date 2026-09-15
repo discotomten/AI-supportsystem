@@ -6,15 +6,16 @@ form.addEventListener('submit', (e) => {
 
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
+    const contactInformation = document.getElementById('contact').value;
 
     fetch("/api/tickets", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, contactInformation }),
     })
     .then(response => response.json())
     .then(ticket => {
-        result.textContent = `Ärendet har skapats med prioritet: ${ticket.priority}`;
+        result.textContent = `Ärendet har skapats!`;
         form.reset();
     })
     .catch(() => {

@@ -4,6 +4,10 @@ using Azure.AI.TextAnalytics;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(o =>
+{
+    o.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 var app = builder.Build();
 
 Env.Load();
@@ -33,7 +37,7 @@ app.MapPost("/api/tickets", (TicketDto ticket) =>
     tickets.Add(newTicket);
     return Results.Created($"/api/tickets/{newTicket.Id}", newTicket);
 });
-app.MapPut("/api/tickets/{id}/close", (int id, TicketDto ticket) =>
+app.MapPut("/api/tickets/{id}/close", (int id) =>
 {
     var existingTicket = tickets.FirstOrDefault(t => t.Id == id);
     if (existingTicket is null)
@@ -41,16 +45,25 @@ app.MapPut("/api/tickets/{id}/close", (int id, TicketDto ticket) =>
         return Results.NotFound();
     }
 
-    existingTicket.Title = ticket.Title;
-    existingTicket.Description = ticket.Description;
-    existingTicket.ContactInformation = ticket.ContactInformation;
-
     var handler = new TicketHandler();
     handler.CloseTicket(existingTicket);
 
     return Results.Ok(existingTicket);
 });
+app.MapPut("/api/tickets/{id}/claim", (int id) =>
+{
+    var existingTicket = tickets.FirstOrDefault(t => t.Id == id);
+    if (existingTicket is null)
+        return Results.NotFound();
+    
+    var handler = new TicketHandler();
+    handler.ClaimTicket(existingTicket);
+
+    return Results.Ok(existingTicket);
+});
 
 app.MapGet("/api/tickets/open", () => tickets.Where(t => t.Status == Status.Open).ToList());
+app.MapGet("/api/tickets/in-progress", () => tickets.Where(t => t.Status == Status.InProgress).ToList());
+app.MapGet("/api/tickets/closed", () => tickets.Where(t => t.Status == Status.Closed).ToList());
 
 app.Run();

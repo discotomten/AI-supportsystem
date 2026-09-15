@@ -4,3 +4,122 @@ form {
     flex-direction: column;
     max-width: 450px;
 }
+
+#tickets {
+    max-width: 700px;
+}
+
+.ticket {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+}
+
+.ticket .meta {
+    font-size: 0.85em;
+    color: #555;
+}
+
+.ticket button {
+    margin-right: 8px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.status-open {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-inprogress {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-closed {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.priority-low {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.priority-medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.priority-high {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+#stats {
+    max-width: 700px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 0.9em;
+    background: #fafafa;
+}
+
+#stats h3 {
+    margin: 0 0 8px 0;
+    font-size: 1em;
+}
+
+.stats-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat-group {
+    flex: 1;
+    min-width: 180px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
+.stat-group h4 {
+    margin: 0 0 6px 0;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.stat-group .badge {
+    margin: 0 4px 4px 0;
+}
+
+.sentiment-positive {
+    background: #d4edda;
+    color: #155724;
+}
+
+.sentiment-neutral {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.sentiment-negative {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.sentiment-mixed {
+    background: #fff3cd;
+    color: #856404;
+}

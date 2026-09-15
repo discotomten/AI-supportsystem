@@ -16,7 +16,6 @@ public class TicketHandler
         };
         
         var totalTicket = $"Title: " + ticket.Title + "Description: " + ticket.Description;
-
         var language = client.DetectLanguage(totalTicket);
         DocumentSentiment documentSentiment = client.AnalyzeSentiment(totalTicket, language.Value.Iso6391Name);
         ticket.Sentiment = documentSentiment.Sentiment;
@@ -36,6 +35,11 @@ public class TicketHandler
     {
         ticket.Status = Status.Closed;
         ticket.ClosedAt = DateTime.UtcNow;
+    }
+    
+    public void ClaimTicket(Ticket ticket)
+    {
+        ticket.Status = Status.InProgress;
     }
 
     private void GuessedPriority(Ticket ticket)
